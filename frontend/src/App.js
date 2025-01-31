@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import UserProfiles from './pages/UserProfiles';
+import ChildProfiles from './pages/ChildProfiles';
+import MedicalRecords from './pages/MedicalRecords';
+import MilestoneLog from './pages/MilestoneLog';
+import VaccineLog from './pages/VaccineLog';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="container">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/userprofiles" element={<UserProfiles />} />
+          <Route path="/child" element={<ChildProfiles />} />
+          <Route path="/medicalrecords" element={<MedicalRecords />} />
+          <Route path="/milestones" element={<MilestoneLog />} />
+          <Route path="/vaccines" element={<VaccineLog />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
