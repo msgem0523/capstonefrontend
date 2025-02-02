@@ -16,7 +16,9 @@ const ChildProfiles = () => {
           setSelectedChild(response.data[0]); // Auto-select first child
         }
       })
-      .catch(error => console.error('Error fetching child profiles:', error));
+      .catch(error => {
+        console.error('Error fetching children:', error);
+      });
   }, []);
 
   // Handle child selection
@@ -30,79 +32,39 @@ const ChildProfiles = () => {
     }
   };
 
+  const calculateAge = (birthdate) => {
+    const birthDate = new Date(birthdate);
+    const ageDifMs = Date.now() - birthDate.getTime();
+    const ageDate = new Date(ageDifMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Child Profiles</h1>
-
-      {/* Dropdown List to Select Child */}
-      <select
-        onChange={handleChildChange}
-        className="p-2 border rounded w-full"
-        value={selectedChild ? selectedChild._id : ''}
-      >
+      <h1 className="text-xl font-bold">Child Profiles</h1>
+      <button onClick={() => navigate('/add-child')} className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>Add Child</button>
+      <select onChange={handleChildChange} value={selectedChild ? selectedChild._id : ''} className="mt-4">
+        <option value="" disabled>Select a child</option>
         {children.map(child => (
           <option key={child._id} value={child._id}>
             {child.firstName} {child.lastName}
           </option>
         ))}
-        <option value="add-child">➕ Add Child</option>
+        <option value="add-child">Add New Child</option>
       </select>
-
-      {/* Display Child Profile Information */}
       {selectedChild && (
-        <div className="mt-6 p-4 border rounded shadow-md">
-          <div className="flex items-center">
-            {/* Profile Picture */}
-            <img
-              src={selectedChild.profilePicture || 'https://via.placeholder.com/100'}
-              alt="Child"
-              className="w-24 h-24 rounded-full mr-4"
-            />
-            <div>
-              <h2 className="text-xl font-bold">{selectedChild.firstName} {selectedChild.lastName}</h2>
-              <p className="text-gray-600">Age: {calculateAge(selectedChild.birthdate)}</p>
-            </div>
-          </div>
-
-          {/* Medical History & Milestones Links */}
-          <div className="mt-4">
-            <button
-              onClick={() => navigate(`/medical-records/${selectedChild._id}`)}
-              className="text-blue-500 hover:underline mr-4"
-            >
-              📋 View Medical History
-            </button>
-            <button
-              onClick={() => navigate(`/milestones/${selectedChild._id}`)}
-              className="text-green-500 hover:underline"
-            >
-              🚀 View Developmental Milestones
-            </button>
-          </div>
-
-          {/* Edit Profile Button */}
-          <button
-            onClick={() => navigate(`/edit-child/${selectedChild._id}`)}
-            className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          >
-            ✏️ Edit Profile
-          </button>
+        <div className="mt-4">
+          <h2 className="text-lg font-bold">Selected Child</h2>
+          <p><strong>Name:</strong> {selectedChild.firstName} {selectedChild.lastName}</p>
+          <p><strong>Birthdate:</strong> {selectedChild.birthdate}</p>
+          <p><strong>Gender:</strong> {selectedChild.gender}</p>
+          <p><strong>Age:</strong> {calculateAge(selectedChild.birthdate)}</p>
+          <button onClick={() => navigate(`/edit-child/${selectedChild._id}`)} className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded">Edit Profile</button>
         </div>
       )}
+      {children.length === 0 && <p>Loading children...</p>}
     </div>
   );
-};
-
-// Helper function to calculate age from birthdate
-const calculateAge = (birthdate) => {
-  const birthDate = new Date(birthdate);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-  return age;
 };
 
 export default ChildProfiles;
