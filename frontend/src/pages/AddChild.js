@@ -22,14 +22,27 @@ const AddChild = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    // Validate data before sending the request
+    if (!childData.firstName || !childData.lastName || !childData.birthdate || !childData.gender) {
+      console.error('All fields are required');
+      return;
+    }
     try {
-      const response = await axios.post('http://localhost:5000/api/children', childData, {
-        headers: { 'Content-Type': 'application/json' }  // ✅ Ensure JSON format
-      });
-  
+      await axios.post(
+        'http://localhost:5000/api/children', 
+        {
+            firstName: childData.firstName.trim(),
+            lastName: childData.lastName.trim(),
+            birthdate: childData.birthdate,
+            gender: childData.gender
+        },
+        {
+            headers: { 'Content-Type': 'application/json' } 
+        }  
+      );
+
       alert('Child added successfully!');
-      navigate('/profiles');
+      navigate('/child');
     } catch (error) {
       console.error('Error adding child:', error.response ? error.response.data : error);
       alert(`Failed to add child: ${error.response?.data?.error || 'Unknown error'}`);
@@ -70,12 +83,38 @@ const AddChild = () => {
         </div>
         <div>
           <label>Gender:</label>
-          <input
-            type="text"
-            name="gender"
-            value={childData.gender}
-            onChange={handleChange}
-          />
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={childData.gender === 'Male'}
+                onChange={handleChange}
+              />
+              Male
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={childData.gender === 'Female'}
+                onChange={handleChange}
+              />
+              Female
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Other"
+                checked={childData.gender === 'Other'}
+                onChange={handleChange}
+              />
+              Other
+            </label>
+          </div>
         </div>
         <button type="submit">Add Child</button>
       </form>
