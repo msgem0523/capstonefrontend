@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
   const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
   });
 
@@ -22,7 +21,7 @@ const AddUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate data before sending the request
-    if (!userData.firstName || !userData.lastName || !userData.email) {
+    if (!userData.name || !userData.email) {
       console.error('All fields are required');
       return;
     }
@@ -42,20 +41,11 @@ const AddUser = () => {
       <h1 className="text-xl font-bold">Add User</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>First Name:</label>
+          <label>Name:</label>
           <input
             type="text"
-            name="firstName"
-            value={userData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={userData.lastName}
+            name="name"
+            value={userData.name}
             onChange={handleChange}
           />
         </div>
