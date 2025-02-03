@@ -9,6 +9,8 @@ import VaccineLog from './pages/VaccineLog';
 import Navbar from './components/Navbar';
 import AddChild from './pages/AddChild';
 import EditChild from './pages/EditChild';
+import AddUser from './pages/AddUser';
+import EditUser from './pages/EditUser';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/medicalrecords" element={<MedicalRecords />} />
           <Route path="/milestones" element={<MilestoneLog />} />
           <Route path="/vaccines" element={<VaccineLog />} />
+          <Route path="/add-user" element={<AddUser />} />
+          <Route path="/edit-user/:id" element={<EditUser />} />
         </Routes>
       </div>
     </Router>

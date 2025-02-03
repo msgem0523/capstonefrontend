@@ -1,91 +1,121 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EditChild = () => {
-  const { id } = useParams(); // Get child ID from URL
-  const navigate = useNavigate();
   const [childData, setChildData] = useState({
     firstName: '',
     lastName: '',
     birthdate: '',
-    gender: 'Male',
+    gender: '',
   });
 
-  // Fetch existing child data
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios.get(`http://localhost:5000/api/children/${id}`)
-      .then(response => setChildData(response.data))
-      .catch(error => console.error('Error fetching child data:', error));
+      .then(response => {
+        setChildData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching child data:', error);
+      });
   }, [id]);
 
-  // Handle form input changes
   const handleChange = (e) => {
-    setChildData({ ...childData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setChildData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  // Submit form to update child
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate data before sending the request
+    if (!childData.firstName || !childData.lastName || !childData.birthdate || !childData.gender) {
+      console.error('All fields are required');
+      return;
+    }
     try {
-      await axios.put(`http://localhost:5000/api/children/${id}`, childData);
-      alert('Child profile updated successfully!');
-      navigate('/profiles'); // Redirect to child profiles page
+      const response = await axios.put(`http://localhost:5000/api/children/${id}`, childData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      alert('Child updated successfully!');
+      navigate('/child');
     } catch (error) {
       console.error('Error updating child:', error);
-      alert('Failed to update child profile.');
     }
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Child Profile</h1>
-      <form onSubmit={handleSubmit} className="border p-4 rounded shadow-md">
-        <label className="block mb-2">First Name:</label>
-        <input
-          type="text"
-          name="firstName"
-          value={childData.firstName}
-          onChange={handleChange}
-          required
-          className="p-2 border rounded w-full mb-3"
-        />
-
-        <label className="block mb-2">Last Name:</label>
-        <input
-          type="text"
-          name="lastName"
-          value={childData.lastName}
-          onChange={handleChange}
-          required
-          className="p-2 border rounded w-full mb-3"
-        />
-
-        <label className="block mb-2">Birthdate:</label>
-        <input
-          type="date"
-          name="birthdate"
-          value={childData.birthdate}
-          onChange={handleChange}
-          required
-          className="p-2 border rounded w-full mb-3"
-        />
-
-        <label className="block mb-2">Gender:</label>
-        <select
-          name="gender"
-          value={childData.gender}
-          onChange={handleChange}
-          className="p-2 border rounded w-full mb-3"
-        >
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-          Update Profile
-        </button>
+      <h1 className="text-xl font-bold">Edit Child</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>First Name:</label>
+          <input
+            type="text"
+            name="firstName"
+            value={childData.firstName}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Last Name:</label>
+          <input
+            type="text"
+            name="lastName"
+            value={childData.lastName}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Birthdate:</label>
+          <input
+            type="date"
+            name="birthdate"
+            value={childData.birthdate}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Gender:</label>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={childData.gender === 'Male'}
+                onChange={handleChange}
+              />
+              Male
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={childData.gender === 'Female'}
+                onChange={handleChange}
+              />
+              Female
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Other"
+                checked={childData.gender === 'Other'}
+                onChange={handleChange}
+              />
+              Other
+            </label>
+          </div>
+        </div>
+        <button type="submit">Update Child</button>
       </form>
     </div>
   );

@@ -7,13 +7,12 @@ const ChildProfiles = () => {
   const [selectedChild, setSelectedChild] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch child profiles from the backend
   useEffect(() => {
-    axios.get('http://localhost:5000/api/children')  // Adjust this endpoint as needed
+    axios.get('http://localhost:5000/api/children')
       .then(response => {
         setChildren(response.data);
         if (response.data.length > 0) {
-          setSelectedChild(response.data[0]); // Auto-select first child
+          setSelectedChild(response.data[0]);
         }
       })
       .catch(error => {
@@ -21,15 +20,18 @@ const ChildProfiles = () => {
       });
   }, []);
 
-  // Handle child selection
   const handleChildChange = (event) => {
     const childId = event.target.value;
     if (childId === 'add-child') {
-      navigate('/add-child'); // Redirect to add child page
+      navigate('/add-child');
     } else {
       const child = children.find(child => child._id === childId);
       setSelectedChild(child);
     }
+  };
+
+  const handleAddChild = () => {
+    navigate('/add-child');
   };
 
   const calculateAge = (birthdate) => {
@@ -42,7 +44,7 @@ const ChildProfiles = () => {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold">Child Profiles</h1>
-      <button onClick={() => navigate('/add-child')} className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>Add Child</button>
+      <button onClick={handleAddChild} className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>Add Child</button>
       <select onChange={handleChildChange} value={selectedChild ? selectedChild._id : ''} className="mt-4">
         <option value="" disabled>Select a child</option>
         {children.map(child => (

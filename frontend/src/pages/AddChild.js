@@ -28,27 +28,15 @@ const AddChild = () => {
       return;
     }
     try {
-      await axios.post(
-        'http://localhost:5000/api/children', 
-        {
-            firstName: childData.firstName.trim(),
-            lastName: childData.lastName.trim(),
-            birthdate: childData.birthdate,
-            gender: childData.gender
-        },
-        {
-            headers: { 'Content-Type': 'application/json' } 
-        }  
-      );
-
+      const response = await axios.post('http://localhost:5000/api/children', childData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
       alert('Child added successfully!');
       navigate('/child');
     } catch (error) {
-      console.error('Error adding child:', error.response ? error.response.data : error);
-      alert(`Failed to add child: ${error.response?.data?.error || 'Unknown error'}`);
+      console.error('Error adding child:', error);
     }
   };
-  
 
   return (
     <div className="p-4">
