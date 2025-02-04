@@ -148,4 +148,76 @@ const MedicalRecords = () => {
   );
 };
 
+const AddMedicalRecord = () => {
+  const { childId } = useParams();
+  const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [headCircumference, setHeadCircumference] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, {
+        date,
+        location,
+        height,
+        weight,
+        headCircumference,
+        notes
+      });
+      console.log('Medical record added successfully:', response.data);
+    } catch (error) {
+      console.error('Error adding record:', error);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Add Medical Record for Child {childId}</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="date"
+          placeholder="Date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+        <select value={location} onChange={(e) => setLocation(e.target.value)}>
+          <option value="">Select Location</option>
+          <option value="Doctor Office">Doctor Office</option>
+          <option value="Hospital">Hospital</option>
+          <option value="Home">Home</option>
+        </select>
+        <input
+          type="number"
+          placeholder="Height (in inches)"
+          value={height}
+          onChange={(e) => setHeight(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Weight (in pounds)"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Head Circumference (in inches)"
+          value={headCircumference}
+          onChange={(e) => setHeadCircumference(e.target.value)}
+        />
+        <textarea
+          placeholder="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+        <button type="submit">Add Medical Record</button>
+      </form>
+    </div>
+  );
+};
+
 export default MedicalRecords;
+export { AddMedicalRecord };
