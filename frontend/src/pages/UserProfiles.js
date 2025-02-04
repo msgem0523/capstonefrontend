@@ -9,6 +9,7 @@ const UserProfiles = () => {
   useEffect(() => {
     axios.get('http://localhost:5000/api/users')
       .then(response => {
+        console.log('Fetched users:', response.data); // Log fetched users
         setUsers(response.data);
       })
       .catch(error => {
@@ -16,18 +17,25 @@ const UserProfiles = () => {
       });
   }, []);
 
+  const handleUserClick = (userId) => {
+    navigate(`/user/${userId}`);
+  };
+
   return (
-    <div>
-      <h1>User Profiles</h1>
+    <div className="p-4">
+      <h1 className="text-xl font-bold">User Profiles</h1>
       <button onClick={() => navigate('/add-user')} className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>Add User</button>
-      <ul>
-        {users.map(user => (
-          <li key={user._id}>
-            {user.firstName} {user.lastName} - {user.email}
-            <button onClick={() => navigate(`/edit-user/${user._id}`)} className='ml-2 px-2 py-1 bg-yellow-500 text-white rounded'>Edit</button>
-          </li>
-        ))}
-      </ul>
+      {users.length === 0 ? (
+        <p>Loading users...</p>
+      ) : (
+        <ul className="mt-4">
+          {users.map(user => (
+            <li key={user._id} className="border p-2 my-2 rounded cursor-pointer" onClick={() => handleUserClick(user._id)}>
+              {user.name}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

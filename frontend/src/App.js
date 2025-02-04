@@ -11,6 +11,8 @@ import AddChild from './pages/AddChild';
 import EditChild from './pages/EditChild';
 import AddUser from './pages/AddUser';
 import EditUser from './pages/EditUser';
+import SelectedUser from './pages/SelectedUser';
+import SelectedChild from './pages/SelectedChild';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <Route path="/vaccines" element={<VaccineLog />} />
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/edit-user/:id" element={<EditUser />} />
+          <Route path="/user/:id" element={<SelectedUser />} />
+          <Route path="/child/:id" element={<SelectedChild />} />
         </Routes>
       </div>
     </Router>
