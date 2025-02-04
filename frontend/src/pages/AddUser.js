@@ -36,6 +36,10 @@ const AddUser = () => {
     }
   };
 
+  const handleAddChild = () => {
+    navigate('/add-child');
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold">Add User</h1>
@@ -60,6 +64,7 @@ const AddUser = () => {
         </div>
         <button type="submit">Add User</button>
       </form>
+      <button onClick={handleAddChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Child</button>
     </div>
   );
 };

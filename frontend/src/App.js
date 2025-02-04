@@ -24,6 +24,7 @@ function App() {
           <Route path="/userprofiles" element={<UserProfiles />} />
           <Route path="/child" element={<ChildProfiles />} />
           <Route path="/add-child" element={<AddChild />} />
+          <Route path="/add-child/:userId" element={<AddChild />} />
           <Route path="/edit-child/:id" element={<EditChild />} />
           <Route path="/medicalrecords" element={<MedicalRecords />} />
           <Route path="/milestones" element={<MilestoneLog />} />

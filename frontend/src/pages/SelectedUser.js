@@ -1,31 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SelectedUser = () => {
-  const [user, setUser] = useState(null);
-  const [children, setChildren] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [children, setChildren] = useState([]);
 
   useEffect(() => {
     // Fetch user details
-    axios.get(`http://localhost:5000/api/users/${id}`)
-      .then(response => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${id}`);
         setUser(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching user data:', error);
-      });
+      }
+    };
 
     // Fetch children of the user
-    axios.get(`http://localhost:5000/api/users/${id}/children`)
-      .then(response => {
+    const fetchChildren = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${id}/children`);
         setChildren(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching children data:', error);
-      });
+      }
+    };
+
+    fetchUser();
+    fetchChildren();
   }, [id]);
 
   const handleChildClick = (childId) => {
@@ -36,11 +41,15 @@ const SelectedUser = () => {
     navigate(`/edit-user/${id}`);
   };
 
+  const handleAddChild = () => {
+    navigate(`/add-child/${id}`);
+  };
+
   return (
     <div className="p-4">
       {user && (
         <>
-          <h1 className="text-xl font-bold">{user.firstName} {user.lastName}</h1>
+          <h1 className="text-xl font-bold">{user.name}</h1>
           <p>Email: {user.email}</p>
           <button onClick={handleEditUser} className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded">Edit User</button>
           <h2 className="text-lg font-bold mt-4">Children</h2>
@@ -55,6 +64,7 @@ const SelectedUser = () => {
               ))}
             </ul>
           )}
+          <button onClick={handleAddChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Child</button>
         </>
       )}
     </div>

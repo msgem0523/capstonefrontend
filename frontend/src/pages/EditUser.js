@@ -4,8 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const EditUser = () => {
   const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
   });
 
@@ -33,7 +32,7 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate data before sending the request
-    if (!userData.firstName || !userData.lastName || !userData.email) {
+    if (!userData.name || !userData.email) {
       console.error('All fields are required');
       return;
     }
@@ -48,25 +47,20 @@ const EditUser = () => {
     }
   };
 
+  const handleAddChild = () => {
+    navigate(`/add-child/${id}`);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold">Edit User</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>First Name:</label>
+          <label>Name:</label>
           <input
             type="text"
-            name="firstName"
-            value={userData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={userData.lastName}
+            name="name"
+            value={userData.name}
             onChange={handleChange}
           />
         </div>
@@ -81,6 +75,7 @@ const EditUser = () => {
         </div>
         <button type="submit">Update User</button>
       </form>
+      <button onClick={handleAddChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Child</button>
     </div>
   );
 };
