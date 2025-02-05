@@ -3,85 +3,63 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const MedicalRecords = () => {
-  const { id } = useParams();
+  const { childId } = useParams();
   const [medicalRecords, setMedicalRecords] = useState([]);
-  const [milestoneLogs, setMilestoneLogs] = useState([]);
-  const [vaccineLogs, setVaccineLogs] = useState([]);
-  const [newRecord, setNewRecord] = useState('');
-  const [newMilestone, setNewMilestone] = useState('');
-  const [newVaccine, setNewVaccine] = useState('');
+  const [newRecord, setNewRecord] = useState({
+    date: '',
+    location: '',
+    height: '',
+    weight: '',
+    headCircumference: '',
+    vaccine: '',
+    notes: ''
+  });
 
   useEffect(() => {
-    const fetchLogs = async () => {
+    const fetchMedicalRecords = async () => {
       try {
-        const medicalResponse = await axios.get(`http://localhost:5000/api/children/${id}/medical-records`);
-        const milestoneResponse = await axios.get(`http://localhost:5000/api/children/${id}/milestones`);
-        const vaccineResponse = await axios.get(`http://localhost:5000/api/children/${id}/vaccines`);
-        setMedicalRecords(medicalResponse.data);
-        setMilestoneLogs(milestoneResponse.data);
-        setVaccineLogs(vaccineResponse.data);
+        const response = await axios.get(`http://localhost:5000/api/children/${childId}/medical-records`);
+        setMedicalRecords(response.data);
       } catch (error) {
-        console.error('Error fetching logs:', error);
+        console.error('Error fetching medical records:', error);
       }
     };
 
-    fetchLogs();
-  }, [id]);
+    fetchMedicalRecords();
+  }, [childId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewRecord((prevRecord) => ({
+      ...prevRecord,
+      [name]: value,
+    }));
+  };
 
   const handleAddRecord = async () => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/children/${id}/medical-records`, { record: newRecord });
+      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, newRecord);
       setMedicalRecords([...medicalRecords, response.data]);
-      setNewRecord('');
+      setNewRecord({
+        date: '',
+        location: '',
+        height: '',
+        weight: '',
+        headCircumference: '',
+        vaccine: '',
+        notes: ''
+      });
     } catch (error) {
       console.error('Error adding record:', error);
     }
   };
 
-  const handleAddMilestone = async () => {
-    try {
-      const response = await axios.post(`http://localhost:5000/api/children/${id}/milestones`, { milestone: newMilestone });
-      setMilestoneLogs([...milestoneLogs, response.data]);
-      setNewMilestone('');
-    } catch (error) {
-      console.error('Error adding milestone:', error);
-    }
-  };
-
-  const handleAddVaccine = async () => {
-    try {
-      const response = await axios.post(`http://localhost:5000/api/children/${id}/vaccines`, { vaccine: newVaccine });
-      setVaccineLogs([...vaccineLogs, response.data]);
-      setNewVaccine('');
-    } catch (error) {
-      console.error('Error adding vaccine:', error);
-    }
-  };
-
   const handleDeleteRecord = async (recordId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/children/${id}/medical-records/${recordId}`);
+      await axios.delete(`http://localhost:5000/api/children/${childId}/medical-records/${recordId}`);
       setMedicalRecords(medicalRecords.filter(record => record._id !== recordId));
     } catch (error) {
       console.error('Error deleting record:', error);
-    }
-  };
-
-  const handleDeleteMilestone = async (milestoneId) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/children/${id}/milestones/${milestoneId}`);
-      setMilestoneLogs(milestoneLogs.filter(milestone => milestone._id !== milestoneId));
-    } catch (error) {
-      console.error('Error deleting milestone:', error);
-    }
-  };
-
-  const handleDeleteVaccine = async (vaccineId) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/children/${id}/vaccines/${vaccineId}`);
-      setVaccineLogs(vaccineLogs.filter(vaccine => vaccine._id !== vaccineId));
-    } catch (error) {
-      console.error('Error deleting vaccine:', error);
     }
   };
 
@@ -90,134 +68,73 @@ const MedicalRecords = () => {
       <h1 className="text-xl font-bold">Medical Records</h1>
       <div>
         <h2 className="text-lg font-bold">Add Medical Record</h2>
-        <input
-          type="text"
-          value={newRecord}
-          onChange={(e) => setNewRecord(e.target.value)}
-          placeholder="New Medical Record"
-        />
-        <button onClick={handleAddRecord} className="ml-2 px-4 py-2 bg-green-500 text-white rounded">Add</button>
+        <form onSubmit={(e) => { e.preventDefault(); handleAddRecord(); }}>
+          <div>
+            <label>Date:</label>
+            <input
+              type="date"
+              name="date"
+              value={newRecord.date}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Location:</label>
+            <select name="location" value={newRecord.location} onChange={handleChange}>
+              <option value="">Select Location</option>
+              <option value="Doctor Office">Doctor Office</option>
+              <option value="Hospital">Hospital</option>
+              <option value="Home">Home</option>
+            </select>
+          </div>
+          <div>
+            <label>Height (in inches):</label>
+            <input
+              type="number"
+              name="height"
+              value={newRecord.height}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Weight (in pounds):</label>
+            <input
+              type="number"
+              name="weight"
+              value={newRecord.weight}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Head Circumference (in centimenters):</label>
+            <input
+              type="number"
+              name="headCircumference"
+              value={newRecord.headCircumference}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Notes:</label>
+            <textarea
+              name="notes"
+              value={newRecord.notes}
+              onChange={handleChange}
+            />
+          </div>
+          <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+        </form>
       </div>
       <ul className="mt-4">
         {medicalRecords.map(record => (
           <li key={record._id} className="border p-2 my-2 rounded">
-            {record.record}
+            {record.date} - {record.location} - {record.height} inches - {record.weight} lbs - {record.headCircumference} inches - {record.vaccine} - {record.notes}
             <button onClick={() => handleDeleteRecord(record._id)} className="ml-2 px-4 py-2 bg-red-500 text-white rounded">Delete</button>
           </li>
         ))}
       </ul>
-
-      <div>
-        <h2 className="text-lg font-bold">Add Milestone</h2>
-        <input
-          type="text"
-          value={newMilestone}
-          onChange={(e) => setNewMilestone(e.target.value)}
-          placeholder="New Milestone"
-        />
-        <button onClick={handleAddMilestone} className="ml-2 px-4 py-2 bg-green-500 text-white rounded">Add</button>
-      </div>
-      <ul className="mt-4">
-        {milestoneLogs.map(milestone => (
-          <li key={milestone._id} className="border p-2 my-2 rounded">
-            {milestone.milestone}
-            <button onClick={() => handleDeleteMilestone(milestone._id)} className="ml-2 px-4 py-2 bg-red-500 text-white rounded">Delete</button>
-          </li>
-        ))}
-      </ul>
-
-      <div>
-        <h2 className="text-lg font-bold">Add Vaccine</h2>
-        <input
-          type="text"
-          value={newVaccine}
-          onChange={(e) => setNewVaccine(e.target.value)}
-          placeholder="New Vaccine"
-        />
-        <button onClick={handleAddVaccine} className="ml-2 px-4 py-2 bg-green-500 text-white rounded">Add</button>
-      </div>
-      <ul className="mt-4">
-        {vaccineLogs.map(vaccine => (
-          <li key={vaccine._id} className="border p-2 my-2 rounded">
-            {vaccine.vaccine}
-            <button onClick={() => handleDeleteVaccine(vaccine._id)} className="ml-2 px-4 py-2 bg-red-500 text-white rounded">Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const AddMedicalRecord = () => {
-  const { childId } = useParams();
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [headCircumference, setHeadCircumference] = useState('');
-  const [notes, setNotes] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, {
-        date,
-        location,
-        height,
-        weight,
-        headCircumference,
-        notes
-      });
-      console.log('Medical record added successfully:', response.data);
-    } catch (error) {
-      console.error('Error adding record:', error);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Add Medical Record for Child {childId}</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="date"
-          placeholder="Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <select value={location} onChange={(e) => setLocation(e.target.value)}>
-          <option value="">Select Location</option>
-          <option value="Doctor Office">Doctor Office</option>
-          <option value="Hospital">Hospital</option>
-          <option value="Home">Home</option>
-        </select>
-        <input
-          type="number"
-          placeholder="Height (in inches)"
-          value={height}
-          onChange={(e) => setHeight(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Weight (in pounds)"
-          value={weight}
-          onChange={(e) => setWeight(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Head Circumference (in inches)"
-          value={headCircumference}
-          onChange={(e) => setHeadCircumference(e.target.value)}
-        />
-        <textarea
-          placeholder="Notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
-        <button type="submit">Add Medical Record</button>
-      </form>
     </div>
   );
 };
 
 export default MedicalRecords;
-export { AddMedicalRecord };

@@ -25,7 +25,7 @@ const AddUser = () => {
         headers: { 'Content-Type': 'application/json' },
       });
       alert('User added successfully!');
-      navigate('/userprofiles');
+      navigate('/userprofiles/view');
     } catch (error) {
       console.error('Error adding user:', error);
     }
@@ -61,7 +61,7 @@ const AddUser = () => {
 
 // EditUser Component
 const EditUser = () => {
-  const { id } = useParams();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: '',
@@ -69,14 +69,14 @@ const EditUser = () => {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/users/${id}`)
+    axios.get(`http://localhost:5000/api/users/${userId}`)
       .then(response => {
         setUserData(response.data);
       })
       .catch(error => {
         console.error('Error fetching user data:', error);
       });
-  }, [id]);
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,11 +89,11 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/api/users/${id}`, userData, {
+      const response = await axios.put(`http://localhost:5000/api/users/${userId}`, userData, {
         headers: { 'Content-Type': 'application/json' },
       });
       alert('User updated successfully!');
-      navigate(`/user/${id}`);
+      navigate(`/userprofiles/view`);
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -129,7 +129,7 @@ const EditUser = () => {
 
 // SelectedUser Component
 const SelectedUser = () => {
-  const { id } = useParams();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [children, setChildren] = useState([]);
@@ -138,7 +138,7 @@ const SelectedUser = () => {
     // Fetch user details
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -148,50 +148,92 @@ const SelectedUser = () => {
     // Fetch children of the user
     const fetchChildren = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${id}/children`);
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}/children`);
         setChildren(response.data);
       } catch (error) {
         console.error('Error fetching children data:', error);
       }
     };
 
-    fetchUser();
-    fetchChildren();
-  }, [id]);
+    if (userId) {
+      fetchUser();
+      fetchChildren();
+    }
+  }, [userId]);
 
   const handleChildClick = (childId) => {
-    navigate(`/child/${childId}`);
+    navigate(`/childprofiles/view/${userId}/${childId}`);
   };
 
   const handleEditUser = () => {
-    navigate(`/edit-user/${id}`);
+    navigate(`/userprofiles/edit/${userId}`);
   };
 
   const handleAddChild = () => {
-    navigate(`/add-child/${id}`);
+    navigate(`/childprofiles/add/${userId}`);
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold">{user.name}</h1>
+      <p>Email: {user.email}</p>
+      <button onClick={handleEditUser} className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded">Edit User</button>
+      <h2 className="text-lg font-bold mt-4">Children</h2>
+      {children.length === 0 ? (
+        <p>No children found.</p>
+      ) : (
+        <ul className="mt-4">
+          {children.map(child => (
+            <li key={child._id} className="border p-2 my-2 rounded cursor-pointer" onClick={() => handleChildClick(child._id)}>
+              {child.firstName} {child.lastName}
+            </li>
+          ))}
+        </ul>
+      )}
+      <button onClick={handleAddChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Child</button>
+    </div>
+  );
+};
+
+// UserList Component
+const UserList = () => {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/users');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleUserClick = (userId) => {
+    navigate(`/userprofiles/view/${userId}`);
   };
 
   return (
     <div className="p-4">
-      {user && (
-        <>
-          <h1 className="text-xl font-bold">{user.name}</h1>
-          <p>Email: {user.email}</p>
-          <button onClick={handleEditUser} className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded">Edit User</button>
-          <h2 className="text-lg font-bold mt-4">Children</h2>
-          {children.length === 0 ? (
-            <p>No children found.</p>
-          ) : (
-            <ul className="mt-4">
-              {children.map(child => (
-                <li key={child._id} className="border p-2 my-2 rounded cursor-pointer" onClick={() => handleChildClick(child._id)}>
-                  {child.firstName} {child.lastName}
-                </li>
-              ))}
-            </ul>
-          )}
-          <button onClick={handleAddChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Child</button>
-        </>
+      <h1 className="text-xl font-bold">User Profiles</h1>
+      {users.length === 0 ? (
+        <p>Loading users...</p>
+      ) : (
+        <ul className="mt-4">
+          {users.map(user => (
+            <li key={user._id} className="border p-2 my-2 rounded cursor-pointer" onClick={() => handleUserClick(user._id)}>
+              {user.name} ({user.email})
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
@@ -205,8 +247,10 @@ const UserProfiles = () => {
     return <AddUser />;
   } else if (action === 'edit') {
     return <EditUser />;
-  } else if (action === 'view') {
+  } else if (action === 'view' && userId) {
     return <SelectedUser />;
+  } else if (action === 'view') {
+    return <UserList />;
   } else {
     return <div>Invalid action</div>;
   }
