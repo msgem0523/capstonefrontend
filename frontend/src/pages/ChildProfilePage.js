@@ -3,172 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
-// AddChild Component
-const AddChild = () => {
-  const { userId } = useParams();
-  const navigate = useNavigate();
-  const [childData, setChildData] = useState({
-    firstName: '',
-    lastName: '',
-    birthdate: '',
-    gender: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setChildData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(`http://localhost:5000/api/users/${userId}/children`, childData);
-      alert('Child added successfully!');
-      navigate(`/userprofiles/view/${userId}`);
-    } catch (error) {
-      console.error('Error adding child:', error);
-    }
-  };
-
-  return (
-    <div className="p-4">
-      <Navbar />
-      <h1 className="text-xl font-bold">Add Child for User {userId}</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            value={childData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={childData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Birthdate:</label>
-          <input
-            type="date"
-            name="birthdate"
-            value={childData.birthdate}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Gender:</label>
-          <select value={childData.gender} onChange={handleChange} name="gender">
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Child</button>
-      </form>
-    </div>
-  );
-};
-
-// EditChild Component
-const EditChild = () => {
-  const { childId } = useParams();
-  const navigate = useNavigate();
-  const [childData, setChildData] = useState({
-    firstName: '',
-    lastName: '',
-    birthdate: '',
-    gender: '',
-  });
-
-  useEffect(() => {
-    axios.get(`http://localhost:5000/api/children/${childId}`)
-      .then(response => {
-        setChildData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching child data:', error);
-      });
-  }, [childId]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setChildData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.put(`http://localhost:5000/api/children/${childId}`, childData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      alert('Child updated successfully!');
-      navigate(`/childprofiles/view/${childId}`);
-    } catch (error) {
-      console.error('Error updating child:', error);
-    }
-  };
-
-  return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold">Edit Child</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            value={childData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={childData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Birthdate:</label>
-          <input
-            type="date"
-            name="birthdate"
-            value={childData.birthdate}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Gender:</label>
-          <select value={childData.gender} onChange={handleChange} name="gender">
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <button type="submit">Update Child</button>
-      </form>
-    </div>
-  );
-};
-
-// ChildProfilePage Component
 const ChildProfilePage = () => {
   const { childId } = useParams();
   const navigate = useNavigate();
@@ -253,6 +87,7 @@ const ChildProfilePage = () => {
 
   return (
     <div className="p-4">
+      <Navbar />
       <h1 className="text-xl font-bold">{child.firstName} {child.lastName}</h1>
       <p>Age: {child.age}</p>
       <p>Gender: {child.gender}</p>
@@ -295,4 +130,4 @@ const ChildProfilePage = () => {
   );
 };
 
-export { AddChild, EditChild, ChildProfilePage };
+export default ChildProfilePage;

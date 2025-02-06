@@ -1,28 +1,31 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import UserProfiles from './pages/UserProfiles';
-import ChildProfiles from './pages/ChildProfiles';
-import MedicalRecords from './pages/MedicalRecords';
-import MilestoneLog from './pages/MilestoneLog';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import UserProfilePage from './pages/UserProfilePage';
+import ChildProfilePage from './pages/ChildProfilePage';
+import { AddUser, EditUser } from './pages/UserProfiles';
+import { AddChild, EditChild } from './pages/ChildProfiles';
+import { AddMedicalRecord, EditMedicalRecord } from './pages/MedicalRecords';
+import { AddMilestone, EditMilestone } from './pages/Milestones';
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <div className="container">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/userprofiles" element={<Navigate to="/userprofiles/view" />} />
-          <Route path="/userprofiles/:action/:userId?" element={<UserProfiles />} />
-          <Route path="/childprofiles/:action/:userId?/:childId?" element={<ChildProfiles />} />
-          <Route path="/medicalrecords" element={<MedicalRecords />} />
-          <Route path="/milestones" element={<MilestoneLog />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/userprofiles/view/:userId" element={<UserProfilePage />} />
+        <Route path="/userprofiles/:userId/add-child" element={<AddChild />} />
+        <Route path="/userprofiles/edit/:userId" element={<EditUser />} />
+        <Route path="/childprofiles/view/:childId" element={<ChildProfilePage />} />
+        <Route path="/childprofiles/edit/:childId" element={<EditChild />} />
+        <Route path="/childprofiles/:childId/add-medical-record" element={<AddMedicalRecord />} />
+        <Route path="/medicalrecords/edit/:recordId" element={<EditMedicalRecord />} />
+        <Route path="/childprofiles/:childId/add-milestone" element={<AddMilestone />} />
+        <Route path="/milestones/edit/:milestoneId" element={<EditMilestone />} />
+        <Route path="/add-user" element={<AddUser />} />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
