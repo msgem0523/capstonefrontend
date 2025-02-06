@@ -1,4 +1,6 @@
 # Pediatric App  
+https://github.com/tanewton0523/capstonefrontend.git
+https://github.com/tanewton0523/capstonebackend.git
 
 ## Overview  
 The **Pediatric App** is a full-stack web application designed to help parents track their child's medical history and developmental milestones. Built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**, this app provides an intuitive and secure platform for managing essential pediatric health data.  

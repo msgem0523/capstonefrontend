@@ -10,11 +10,6 @@ const ChildProfilePage = () => {
   const [medicalRecords, setMedicalRecords] = useState([]);
   const [milestones, setMilestones] = useState([]);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
-    date: "",
-    location: "",
-    notes: "",
-  });
 
   useEffect(() => {
     const fetchChild = async () => {
@@ -70,23 +65,12 @@ const ChildProfilePage = () => {
     navigate(`/childprofiles/edit/${childId}`);
   };
 
-  const handleAddMedicalRecord = async (e) => {
-    e.preventDefault();
-    try {
-      if (!childId) {
-        console.error("No child selected");
-        return;
-      }
+  const handleAddMedicalRecord = () => {
+    navigate(`/childprofiles/${childId}/add-medical-record`);
+  };
 
-      console.log("Form data:", formData); // Debugging log
-      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, formData);
-      console.log("Response data:", response.data); // Debugging log
-      setMedicalRecords([...medicalRecords, response.data]);
-      alert("Medical record added successfully!");
-    } catch (error) {
-      console.error("Error adding medical record:", error); // Debugging log
-      alert("Error adding medical record");
-    }
+  const handleAddMilestone = () => {
+    navigate(`/childprofiles/${childId}/add-milestone`);
   };
 
   const handleEditMedicalRecord = (recordId) => {
@@ -102,10 +86,6 @@ const ChildProfilePage = () => {
     }
   };
 
-  const handleAddMilestone = () => {
-    navigate(`/childprofiles/${childId}/add-milestone`);
-  };
-
   const handleEditMilestone = (milestoneId) => {
     navigate(`/milestones/edit/${milestoneId}`);
   };
@@ -117,14 +97,6 @@ const ChildProfilePage = () => {
     } catch (error) {
       console.error("Error deleting milestone:", error);
     }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
   };
 
   if (error) {
@@ -158,7 +130,7 @@ const ChildProfilePage = () => {
           ))}
         </ul>
       )}
-        <button onClick={handleAddMedicalRecord} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+      <button onClick={handleAddMedicalRecord} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
       <h2 className="text-lg font-bold mt-4">Milestones</h2>
       {milestones.length === 0 ? (
         <p>No milestones found.</p>

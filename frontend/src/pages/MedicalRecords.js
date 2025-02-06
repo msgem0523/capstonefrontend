@@ -43,6 +43,8 @@ const MedicalRecords = () => {
         {
           date,
           location,
+          height,
+          weight,
           notes
         }
       );
@@ -360,5 +362,102 @@ const EditMedicalRecord = () => {
   );
 };
 
+const AddMedicalRecordPage = () => {
+  const { childId } = useParams();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    date: "",
+    location: "",
+    height: "",
+    weight: "",
+    notes: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleAddMedicalRecord = async (e) => {
+    e.preventDefault();
+    try {
+      if (!childId) {
+        console.error("No child selected");
+        return;
+      }
+
+      console.log("Form data:", formData); // Debugging log
+      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, formData);
+      console.log("Response data:", response.data); // Debugging log
+      alert("Medical record added successfully!");
+      navigate(`/childprofiles/view/${childId}`);
+    } catch (error) {
+      console.error("Error adding medical record:", error); // Debugging log
+      alert("Error adding medical record");
+    }
+  };
+
+  return (
+    <div className="p-4">
+      <Navbar />
+      <h1 className="text-xl font-bold">Add Medical Record</h1>
+      <form onSubmit={handleAddMedicalRecord}>
+        <div>
+          <label>Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Location:</label>
+          <select
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Location</option>
+            <option value="Clinic">Clinic</option>
+            <option value="Hospital">Hospital</option>
+            <option value="Home">Home</option>
+          </select>
+        </div>
+        <div>
+          <label>Height:</label>
+          <input
+            type="text"
+            name="height"
+            value={formData.height}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Weight:</label>
+          <input
+            type="text"
+            name="weight"
+            value={formData.weight}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Notes:</label>
+          <textarea
+            name="notes"
+            value={formData.notes}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+      </form>
+    </div>
+  );
+};
+
 export default MedicalRecords;
-export { AddMedicalRecord, EditMedicalRecord };
+export { AddMedicalRecord, EditMedicalRecord, AddMedicalRecordPage };
