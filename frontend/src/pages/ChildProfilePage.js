@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Navbar from "../components/Navbar";
 
 const ChildProfilePage = () => {
   const { childId } = useParams();
@@ -9,32 +9,44 @@ const ChildProfilePage = () => {
   const [child, setChild] = useState(null);
   const [medicalRecords, setMedicalRecords] = useState([]);
   const [milestones, setMilestones] = useState([]);
+  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    date: "",
+    location: "",
+    notes: "",
+  });
 
   useEffect(() => {
     const fetchChild = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/children/${childId}`);
+        console.log("Child data:", response.data); // Debugging log
         setChild(response.data);
       } catch (error) {
-        console.error('Error fetching child:', error);
+        console.error("Error fetching child:", error);
+        setError("Child not found");
       }
     };
 
     const fetchMedicalRecords = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/children/${childId}/medical-records`);
+        console.log("Medical records data:", response.data); // Debugging log
         setMedicalRecords(response.data);
       } catch (error) {
-        console.error('Error fetching medical records:', error);
+        console.error("Error fetching medical records:", error);
+        setError("Medical records not found");
       }
     };
 
     const fetchMilestones = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/children/${childId}/milestones`);
+        console.log("Milestones data:", response.data); // Debugging log
         setMilestones(response.data);
       } catch (error) {
-        console.error('Error fetching milestones:', error);
+        console.error("Error fetching milestones:", error);
+        setError("Milestones not found");
       }
     };
 
@@ -47,8 +59,19 @@ const ChildProfilePage = () => {
     navigate(`/childprofiles/edit/${childId}`);
   };
 
-  const handleAddMedicalRecord = () => {
-    navigate(`/childprofiles/${childId}/add-medical-record`);
+  const handleAddMedicalRecord = async () => {
+    try {
+      if (!childId) {
+        console.error("No child selected");
+        return;
+      }
+
+      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, formData);
+      setMedicalRecords([...medicalRecords, response.data]);
+      alert("Medical record added successfully!");
+    } catch (error) {
+      alert("Error adding medical record");
+    }
   };
 
   const handleEditMedicalRecord = (recordId) => {
@@ -60,7 +83,7 @@ const ChildProfilePage = () => {
       await axios.delete(`http://localhost:5000/api/medical-records/${recordId}`);
       setMedicalRecords(medicalRecords.filter(record => record._id !== recordId));
     } catch (error) {
-      console.error('Error deleting medical record:', error);
+      console.error("Error deleting medical record:", error);
     }
   };
 
@@ -77,9 +100,13 @@ const ChildProfilePage = () => {
       await axios.delete(`http://localhost:5000/api/milestones/${milestoneId}`);
       setMilestones(milestones.filter(milestone => milestone._id !== milestoneId));
     } catch (error) {
-      console.error('Error deleting milestone:', error);
+      console.error("Error deleting milestone:", error);
     }
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (!child) {
     return <div>Loading...</div>;

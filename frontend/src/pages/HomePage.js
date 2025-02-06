@@ -27,7 +27,7 @@ const HomePage = () => {
   return (
     <div className="p-4">
       <Navbar />
-      <h1 className="text-xl font-bold">Welcome to your own health tracker for your little ones. Please select your name to begin.</h1>
+      <h1 className="text-xl font-bold">Welcome to your own health tracker for your little ones. Please select or create your profile to begin.</h1>
       <ul>
         {users.map(user => (
           <li key={user._id} onClick={() => navigate(`/userprofiles/view/${user._id}`)} className="cursor-pointer">

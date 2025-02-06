@@ -12,9 +12,7 @@ const UserProfilePage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/users/${userId}`
-        );
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -23,9 +21,7 @@ const UserProfilePage = () => {
 
     const fetchChildren = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/users/${userId}/children`
-        );
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}/children`);
         setChildren(response.data);
       } catch (error) {
         console.error("Error fetching children:", error);

@@ -36,20 +36,20 @@ const MedicalRecords = () => {
     }));
   };
 
-  const handleAddRecord = async () => {
+  const handleAddRecord = async ( childId, date, location, height, weight, notes) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, newRecord);
-      setMedicalRecords([...medicalRecords, response.data]);
-      setNewRecord({
-        date: '',
-        location: '',
-        height: '',
-        weight: '',
-        headCircumference: '',
-        notes: ''
-      });
+      const response = await axios.post(
+        `http://localhost:5000/api/children/${childId}/medical-records`,  // Use childId in URL
+        {
+          date,
+          location,
+          notes
+        }
+      );
+      return response.data;
     } catch (error) {
-      console.error('Error adding record:', error);
+      console.error("Error adding medical record:", error.response?.data || error.message);
+      throw error;
     }
   };
 
