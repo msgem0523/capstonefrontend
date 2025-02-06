@@ -189,6 +189,7 @@ const AddMedicalRecord = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(`${childId}`)
       const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, newRecord);
       alert('Medical record added successfully!');
       navigate(`/childprofiles/view/${childId}`);
@@ -262,7 +263,7 @@ const AddMedicalRecord = () => {
 
 // SelectedChild Component
 const SelectedChild = () => {
-  const { childId } = useParams();
+  const { userId, childId } = useParams();
   const navigate = useNavigate();
   const [child, setChild] = useState(null);
   const [medicalRecords, setMedicalRecords] = useState([]);
@@ -291,7 +292,7 @@ const SelectedChild = () => {
   }, [childId]);
 
   const handleAddMedicalRecord = () => {
-    navigate(`/childprofiles/add-medical-record/${childId}`);
+    navigate(`/childprofiles/add-medical-record/${userId}/${childId}`);
   };
 
   if (!child) {
