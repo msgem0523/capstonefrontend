@@ -158,35 +158,7 @@ const ChildProfilePage = () => {
           ))}
         </ul>
       )}
-      <form onSubmit={handleAddMedicalRecord}>
-        <div>
-          <label>Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label>Location:</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label>Notes:</label>
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
-      </form>
+    
       <h2 className="text-lg font-bold mt-4">Milestones</h2>
       {milestones.length === 0 ? (
         <p>No milestones found.</p>
