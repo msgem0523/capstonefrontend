@@ -7,66 +7,73 @@ import Navbar from '../components/Navbar';
 const AddMilestone = () => {
   const { childId } = useParams();
   const navigate = useNavigate();
-  const [child, setChild] = useState(null);
-  const [newMilestone, setNewMilestone] = useState({
+  const [milestoneData, setMilestoneData] = useState({
     date: '',
+    category: '',
     description: ''
   });
 
-  useEffect(() => {
-    const fetchChild = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/children/${childId}`);
-        setChild(response.data);
-      } catch (error) {
-        console.error('Error fetching child data:', error);
-      }
-    };
-
-    fetchChild();
-  }, [childId]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewMilestone((prevMilestone) => ({
-      ...prevMilestone,
+    setMilestoneData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleAddMilestone = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/children/${childId}/milestones`, newMilestone);
+      if (!childId) {
+        console.error('No child selected');
+        return;
+      }
+
+      console.log('Form data:', milestoneData); // Debugging log
+      const response = await axios.post(`http://localhost:5000/api/children/${childId}/milestones`, milestoneData);
+      console.log('Response data:', response.data); // Debugging log
       alert('Milestone added successfully!');
       navigate(`/childprofiles/view/${childId}`);
     } catch (error) {
-      console.error('Error adding milestone:', error);
+      console.error('Error adding milestone:', error); // Debugging log
+      alert('Error adding milestone');
     }
   };
 
-  if (!child) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold">Add Milestone for {child.firstName} {child.lastName}</h1>
-      <form onSubmit={handleSubmit}>
+      <Navbar />
+      <h1 className="text-xl font-bold">Add Milestone</h1>
+      <form onSubmit={handleAddMilestone}>
         <div>
           <label>Date:</label>
           <input
             type="date"
             name="date"
-            value={newMilestone.date}
+            value={milestoneData.date}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label>Category:</label>
+          <select
+            name="category"
+            value={milestoneData.category}
+            onChange={handleChange}
+          >
+            <option value="">Select Category</option>
+            <option value="Physical">Physical</option>
+            <option value="Cognitive">Cognitive</option>
+            <option value="Social">Social</option>
+            <option value="Emotional">Emotional</option>
+            <option value="Language">Language</option>
+          </select>
         </div>
         <div>
           <label>Description:</label>
           <textarea
             name="description"
-            value={newMilestone.description}
+            value={milestoneData.description}
             onChange={handleChange}
           />
         </div>
@@ -82,6 +89,7 @@ const EditMilestone = () => {
   const navigate = useNavigate();
   const [milestoneData, setMilestoneData] = useState({
     date: '',
+    category: '',
     description: ''
   });
 
@@ -106,16 +114,16 @@ const EditMilestone = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleUpdateMilestone = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/api/milestones/${milestoneId}`, milestoneData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const response = await axios.put(`http://localhost:5000/api/milestones/${milestoneId}`, milestoneData);
+      console.log('Response data:', response.data); // Debugging log
       alert('Milestone updated successfully!');
-      navigate(`/childprofiles/view/${milestoneData.childId}`);
+      navigate(`/childprofiles/view/${response.data.childId}`);
     } catch (error) {
-      console.error('Error updating milestone:', error);
+      console.error('Error updating milestone:', error); // Debugging log
+      alert('Error updating milestone');
     }
   };
 
@@ -123,7 +131,7 @@ const EditMilestone = () => {
     <div className="p-4">
       <Navbar />
       <h1 className="text-xl font-bold">Edit Milestone</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleUpdateMilestone}>
         <div>
           <label>Date:</label>
           <input
@@ -132,6 +140,21 @@ const EditMilestone = () => {
             value={milestoneData.date}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label>Category:</label>
+          <select
+            name="category"
+            value={milestoneData.category}
+            onChange={handleChange}
+          >
+            <option value="">Select Category</option>
+            <option value="Physical">Physical</option>
+            <option value="Cognitive">Cognitive</option>
+            <option value="Social">Social</option>
+            <option value="Emotional">Emotional</option>
+            <option value="Language">Language</option>
+          </select>
         </div>
         <div>
           <label>Description:</label>
