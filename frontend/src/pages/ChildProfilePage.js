@@ -55,21 +55,36 @@ const ChildProfilePage = () => {
     fetchMilestones();
   }, [childId]);
 
+  const calculateAge = (birthdate) => {
+    const birthDate = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const handleEditChild = () => {
     navigate(`/childprofiles/edit/${childId}`);
   };
 
-  const handleAddMedicalRecord = async () => {
+  const handleAddMedicalRecord = async (e) => {
+    e.preventDefault();
     try {
       if (!childId) {
         console.error("No child selected");
         return;
       }
 
+      console.log("Form data:", formData); // Debugging log
       const response = await axios.post(`http://localhost:5000/api/children/${childId}/medical-records`, formData);
+      console.log("Response data:", response.data); // Debugging log
       setMedicalRecords([...medicalRecords, response.data]);
       alert("Medical record added successfully!");
     } catch (error) {
+      console.error("Error adding medical record:", error); // Debugging log
       alert("Error adding medical record");
     }
   };
@@ -104,6 +119,14 @@ const ChildProfilePage = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -116,7 +139,7 @@ const ChildProfilePage = () => {
     <div className="p-4">
       <Navbar />
       <h1 className="text-xl font-bold">{child.firstName} {child.lastName}</h1>
-      <p>Age: {child.age}</p>
+      <p>Age: {calculateAge(child.birthdate)}</p>
       <p>Gender: {child.gender}</p>
       <button onClick={handleEditChild} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Edit Child</button>
       <h2 className="text-lg font-bold mt-4">Medical Records</h2>
@@ -135,7 +158,35 @@ const ChildProfilePage = () => {
           ))}
         </ul>
       )}
-      <button onClick={handleAddMedicalRecord} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+      <form onSubmit={handleAddMedicalRecord}>
+        <div>
+          <label>Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Location:</label>
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Notes:</label>
+          <textarea
+            name="notes"
+            value={formData.notes}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+      </form>
       <h2 className="text-lg font-bold mt-4">Milestones</h2>
       {milestones.length === 0 ? (
         <p>No milestones found.</p>
