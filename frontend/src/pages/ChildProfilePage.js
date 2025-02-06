@@ -158,7 +158,7 @@ const ChildProfilePage = () => {
           ))}
         </ul>
       )}
-        <button type="submit" className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
+        <button onClick={handleAddMedicalRecord} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">Add Medical Record</button>
       <h2 className="text-lg font-bold mt-4">Milestones</h2>
       {milestones.length === 0 ? (
         <p>No milestones found.</p>
