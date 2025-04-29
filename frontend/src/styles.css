@@ -1,0 +1,79 @@
+/* Color Palette */
+:root {
+  --soft-blue: #A3D9FF;
+  --pastel-green: #C5E898;
+  --peach: #FFD3B6;
+  --soft-purple: #D7B4F3;
+  --light-gray: #F5F5F5;
+  --dark-gray: #333333;
+}
+
+/* Typography */
+body {
+  margin: 0;
+  font-family: 'Arial, sans-serif';
+  font-size: 16px;
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Button Styles */
+.button-primary {
+  background-color: var(--soft-blue);
+  color: var(--dark-gray);
+}
+
+.button-secondary {
+  background-color: var(--pastel-green);
+  color: var(--dark-gray);
+}
+
+.button-tertiary {
+  background-color: var(--soft-purple);
+  color: var(--dark-gray);
+}
+
+/* Message Styles */
+.message-success {
+  background-color: var(--pastel-green);
+  color: var(--dark-gray);
+}
+
+.message-warning {
+  background-color: var(--peach);
+  color: var(--dark-gray);
+}
+
+.message-info {
+  background-color: var(--soft-purple);
+  color: var(--dark-gray);
+}
+
+/* Form Styles */
+input, select, textarea {
+  border: 1px solid var(--dark-gray);
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+form {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

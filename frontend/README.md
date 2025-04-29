@@ -21,4 +21,4 @@ The **Pediatric App** is a full-stack web application designed to help parents t
 2. Medical records and milestones can be logged, updated, and viewed.   
 
 ## Contact  
-For inquiries or collaboration, feel free to connect on **[LinkedIn](https://www.linkedin.com/in/temecha/)**.  
+For inquiries or collaboration, feel free to connect on **[LinkedIn](https://www.linkedin.com/in/temecha-griffin/)**.  
