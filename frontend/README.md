@@ -41,7 +41,7 @@ git clone https://github.com/msgem0523/capstonefrontend.git
 cd capstonefrontend
 npm install
 npm start
-
+```
 
 
 
