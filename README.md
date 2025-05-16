@@ -41,3 +41,19 @@ git clone https://github.com/msgem0523/capstonefrontend.git
 cd capstonefrontend
 npm install
 npm start
+
+
+
+
+
+
+---
+
+## Contact  
+Got questions, feedback, or want to collaborate on pediatric tech?  
+Reach out to me on [LinkedIn](https://www.linkedin.com/in/temecha-griffin/). 💜
+
+---
+
+## License  
+This project is licensed under the [MIT License](./LICENSE).
