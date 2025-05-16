@@ -1,8 +1,8 @@
-# Pediatric App – GrowthGuard Frontend  
+# GrowthGuard App Frontend  
 [Frontend Repo](https://github.com/msgem0523/capstonefrontend) | [Backend Repo](https://github.com/msgem0523/capstonebackend)
 
 ## Overview  
-The **Pediatric App (GrowthGuard)** is a full-stack web application designed to help parents track their child's medical history and developmental milestones. Built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**, this app provides an intuitive and secure platform for managing essential pediatric health data.
+The **GrowthGuard App** is a full-stack web application designed to help parents track their child's medical history and developmental milestones. Built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**, this app provides an intuitive and secure platform for managing essential pediatric health data.
 
 This repo contains the **frontend** built with React.js, connecting to the backend API for seamless data handling.
 
