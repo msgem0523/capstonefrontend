@@ -1,13 +1,43 @@
-Why would you build this app?/What's the purpose?
-- A way to keep up with medical history and milestones
+# Pediatric App – GrowthGuard Frontend  
+[Frontend Repo](https://github.com/msgem0523/capstonefrontend) | [Backend Repo](https://github.com/msgem0523/capstonebackend)
 
-How will you model you data? (Schema) what is the data you are CRUDing?
--Child information, child health metrics/milestones, chil development metrics/milestones
+## Overview  
+The **Pediatric App (GrowthGuard)** is a full-stack web application designed to help parents track their child's medical history and developmental milestones. Built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**, this app provides an intuitive and secure platform for managing essential pediatric health data.
 
-What are your 4 pages? (How will you create Full CRUD on the FE)
--User profile, health tracker, caregiver resources, activity planner 
+This repo contains the **frontend** built with React.js, connecting to the backend API for seamless data handling.
 
-Do you have a third party API? 
--Yes
+---
 
-Wireframe pls!
+## Features  
+✅ **Medical Logging** – Keep track of vaccinations, allergies, prescriptions, and doctor visits.  
+✅ **Milestone Tracking** – Log and monitor developmental milestones based on age groups.  
+✅ **Responsive UI** – Designed for mobile and desktop use  
+✅ **Secure & Scalable** – Built with best practices for frontend security and API communication  
+
+---
+
+## Tech Stack  
+- **Frontend:** React.js, JavaScript, HTML5, CSS3  
+- **API Requests:** Axios  
+- **State Management:** Context API (Redux TBD)  
+- **Routing:** React Router  
+- **Deployment:** Netlify (optional enhancement)
+
+---
+
+## How It Works  
+1. Parents create an account and add their child's profile.  
+2. Medical records and milestones can be logged, updated, and viewed.  
+3. Data is synced with the backend using secure API endpoints.  
+
+---
+
+## Installation
+
+To run this frontend locally:
+
+```bash
+git clone https://github.com/msgem0523/capstonefrontend.git
+cd capstonefrontend
+npm install
+npm start
