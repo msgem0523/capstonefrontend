@@ -1,65 +1,81 @@
-# GrowthGuard App Frontend
+# 🎨 Capstone Frontend — React + Vite
 
-[Frontend Repo](https://github.com/msgem0523/capstonefrontend) | [Backend Repo](https://github.com/msgem0523/capstonebackend)
+**Capstone Project** • Frontend Application
 
-## Overview
-
-The **GrowthGuard App** is a full-stack web application designed to help parents track their child's medical history and developmental milestones. Built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**, this app provides an intuitive and secure platform for managing essential pediatric health data.
-
-This repo contains the **frontend** built with React.js, connecting to the backend API for seamless data handling.
+This repository contains the **frontend** of my full-stack capstone project. It is built with **React and Vite** and provides the user interface that communicates with a custom backend API.
 
 ---
 
-## Features
+## 🧠 About the Frontend
 
-✅ **Medical Logging** – Keep track of vaccinations, allergies, prescriptions, and doctor visits.  
-✅ **Milestone Tracking** – Log and monitor developmental milestones based on age groups.  
-✅ **Responsive UI** – Designed for mobile and desktop use  
-✅ **Secure & Scalable** – Built with best practices for frontend security and API communication
+The frontend is responsible for:
 
----
+- Rendering the user interface
+- Managing client-side state
+- Handling user interactions
+- Sending requests to the backend API
+- Displaying data returned from the server
 
-## Tech Stack
-
-- **Frontend:** React.js, JavaScript, HTML5, CSS3
-- **API Requests:** Axios
-- **State Management:** Context API (Redux TBD)
-- **Routing:** React Router
-- **Deployment:** Netlify (optional enhancement)
+This app is built with performance and modularity in mind using modern React tooling.
 
 ---
 
-## How It Works
+## 🛠️ Technologies Used
 
-1. Parents create an account and add their child's profile.
-2. Medical records and milestones can be logged, updated, and viewed.
-3. Data is synced with the backend using secure API endpoints.
+| Technology | Purpose |
+|------------|---------|
+| **React** | Component-based UI |
+| **Vite** | Fast build tool and dev server |
+| **JavaScript (ES6+)** | Application logic |
+| **HTML / JSX** | Markup and components |
+| **CSS** | Styling |
 
 ---
 
-## Installation
+## 🔗 Related Repository
 
-To run this frontend locally:
+👉 **Backend API:**  
+https://github.com/msgem0523/capstonebackend
 
-```bash
-git clone https://github.com/msgem0523/capstonefrontend.git
-cd capstonefrontend
-npm install
-npm start
-```
+---
 
+## 📁 Project Structure
 
-
+├── src/ – React components and logic
+├── public/ – Static assets
+├── index.html – App entry point
+├── package.json – Dependencies and scripts
+└── README.md – Documentation
 
 
 ---
 
-## Contact
-Got questions, feedback, or want to collaborate on pediatric tech?
-Reach out to me on [LinkedIn](https://www.linkedin.com/in/temecha-griffin/). 💜
+## ▶️ How to Run Locally
 
----
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/msgem0523/capstonefrontend.git
+   cd capstonefrontend
+2. Install dependencies:
+   ```bash
+   npm install
+3. Start the development server:
+   ```bash
+   npm run dev
+4. Open the browser at:
+   http://localhost:5173
 
-## License
-This project is licensed under the [MIT License](./LICENSE).
+🧩 Learning Outcomes
 
+Through this project, I practiced:
+
+✔ Building a React application from scratch
+✔ Using Vite for modern frontend tooling
+✔ Managing component state and props
+✔ Connecting a frontend to a backend API
+✔ Structuring a scalable frontend project
+
+✨ Author
+
+TeMecha Griffin (MsGem0523)
+Aspiring Software Engineer | Frontend & Backend Developer
